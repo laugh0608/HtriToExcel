@@ -7,4 +7,8 @@ HtriToExcel is a Python script that converts HTRI (Heat Transfer Research, Inc.)
 
 使用 .NET 通过 COM 调用 HTRI 9 进行输入、运行和报表导出。
 
+```bash
+dotnet add package Scalar.AspNetCore
+```
+
 > 正在开发中...
