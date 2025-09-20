@@ -2,6 +2,8 @@
 
 namespace HtriToExcel;
 
+/// <summary>服务层实现类</summary>
+/// <param name="htriNetWork"></param>
 public class HtriToExcel(HeatExchangerNetwork htriNetWork)
 {
     // 定义一个 HTRI NetWork 服务器，这是 HTRI 自带的对外 API 接口

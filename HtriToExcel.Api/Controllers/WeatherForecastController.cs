@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
+using Scalar.AspNetCore;
 
 namespace HtriToExcel.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
@@ -19,6 +20,9 @@ namespace HtriToExcel.Api.Controllers
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
+        [Tags("Test API")]
+        [EndpointSummary("测试 API")]
+        [Badge("V1", BadgePosition.Before, "#007bff")]
         public IEnumerable<WeatherForecast> Get()
         {
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
