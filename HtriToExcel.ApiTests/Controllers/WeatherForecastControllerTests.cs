@@ -9,7 +9,7 @@ namespace HtriToExcel.ApiTests.Controllers;
 [TestSubject(typeof(WeatherForecastController))]
 public class WeatherForecastControllerTest
 {
-    [TestMethod()]
+    [TestMethod]
     public void GetTest()
     {
         ILogger<WeatherForecastController> logger = new NullLogger<WeatherForecastController>();

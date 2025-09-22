@@ -15,18 +15,18 @@ public class HtriRun
         {
             UserId = model.UserId,
             FileName = model.FileName,
-            RunStatus = 0,
+            RunStatus = -1,
         };
 
         // 确保 UserId 和 FileName 存在
-        if (model.UserId is 0 || model.FileName == "" || model.FileName == "string")
+        if (model.UserId is 0 or <= 10000 || model.FileName == "" || model.FileName == "string")
         {
             resultModel.RunStatus = -1;
-            resultModel.RunMessage = "UserId or FileName is empty";
+            resultModel.RunMessage = "UserID or FileName is invalid";
             return resultModel;
         }
         
-        // 定义一个 HTRI NetWork 服务器，这是 HTRI 自带的对外 API 接口
+        // 定义一个 HTRI NetWork 服务器，这是 HTRI 自带的对外 API 接口服务
         HeatExchangerNetwork htriNetWork;
 
         try
@@ -36,7 +36,7 @@ public class HtriRun
         }
         catch (Exception ex)
         {
-            resultModel.RunStatus = -2;
+            resultModel.RunStatus = -1;
             resultModel.RunMessage = $"HTRI Failed To Start: {ex.Message}";
             return resultModel;
         }
@@ -45,7 +45,7 @@ public class HtriRun
         {
             // 通过用户名来读取文件路径
             var basePath = AppDomain.CurrentDomain.BaseDirectory;
-            var fullPath = Path.Combine(basePath, "Data", "HTRI", model.UserId.ToString());
+            var fullPath = Path.Combine(basePath, "HTRI", "Case", model.UserId.ToString());
             // 检查目录是否存在
             if (!Directory.Exists(fullPath))
             {
@@ -59,11 +59,13 @@ public class HtriRun
         }
         catch (Exception ex)
         {
-            resultModel.RunStatus = -3;
+            resultModel.RunStatus = -1;
             resultModel.RunMessage = $"HTRI Failed To Open File: {ex.Message}";
             return resultModel;
         }
-        
+
+        resultModel.RunStatus = 0;
+        resultModel.RunMessage = "HTRI Success";
         return resultModel;
     }
 }

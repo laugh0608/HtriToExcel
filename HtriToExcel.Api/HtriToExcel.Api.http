@@ -1,6 +1,10 @@
-@HtriToExcel.Api_HostAddress = http://localhost:5082
+@HtriToExcel.Api_HostAddress = https://localhost:7033
 
-GET {{HtriToExcel.Api_HostAddress}}/weatherforecast/
+GET {{HtriToExcel.Api_HostAddress}}/
 Accept: application/json
+
+###
+
+GET {{HtriToExcel.Api_HostAddress}}/weatherforecast/Get
 
 ###
