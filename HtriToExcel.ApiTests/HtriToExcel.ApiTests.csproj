@@ -1,24 +1,48 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <LangVersion>latest</LangVersion>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2025.2.2" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
-    <PackageReference Include="MSTest" Version="3.6.4" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="JetBrains.Annotations" Version="2025.2.2"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+        <PackageReference Include="MSTest" Version="3.10.4" />
+        <PackageReference Include="MSTest.TestAdapter" Version="3.10.4" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\HtriToExcel.Api\HtriToExcel.Api.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\HtriToExcel.Api\HtriToExcel.Api.csproj"/>
+        <ProjectReference Include="..\HtriToExcel.Core\HtriToExcel.Core.csproj" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
-  </ItemGroup>
+    <ItemGroup>
+        <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting"/>
+    </ItemGroup>
+
+    <Target Name="CopyTestFiles" BeforeTargets="Build">
+        <!-- 目标路径 -->
+        <PropertyGroup>
+            <TargetFolder>$(OutputPath)HTRI\Case\10086\</TargetFolder>
+        </PropertyGroup>
+        <!-- 检查并创建目录 -->
+        <Message Text="创建目录: $(TargetFolder)" Importance="high"/>
+        <MakeDir Directories="$(TargetFolder)"
+                 Condition="!Exists('$(TargetFolder)')"/>
+        <!-- 源文件路径 -->
+        <ItemGroup>
+            <TestFiles Include="TestFiles\**\*"/>
+        </ItemGroup>
+        <!-- 检查源文件是否存在 -->
+        <Message Text="复制文件从 TestFiles 到 $(TargetFolder)" Importance="high"/>
+
+        <Copy SourceFiles="@(TestFiles)"
+              DestinationFolder="$(TargetFolder)"
+              SkipUnchangedFiles="true"
+              Condition="Exists('TestFiles')"/>
+    </Target>
 
 </Project>
