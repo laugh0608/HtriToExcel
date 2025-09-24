@@ -1,7 +1,5 @@
-using System.Data.SqlTypes;
 using HtriToExcel.Api.Filter;
 using Microsoft.AspNetCore.Mvc;
-using Scalar.AspNetCore;
 
 namespace HtriToExcel.Api.Controllers;
 
