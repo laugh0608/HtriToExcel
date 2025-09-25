@@ -9,40 +9,48 @@
 
     <ItemGroup>
         <PackageReference Include="JetBrains.Annotations" Version="2025.2.2"/>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-        <PackageReference Include="MSTest" Version="3.10.4" />
-        <PackageReference Include="MSTest.TestAdapter" Version="3.10.4" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1"/>
+        <PackageReference Include="MSTest" Version="3.10.4"/>
+        <PackageReference Include="MSTest.TestAdapter" Version="3.10.4"/>
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\HtriToExcel.Api\HtriToExcel.Api.csproj"/>
-        <ProjectReference Include="..\HtriToExcel.Core\HtriToExcel.Core.csproj" />
+        <ProjectReference Include="..\HtriToExcel.Core\HtriToExcel.Core.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
         <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting"/>
     </ItemGroup>
 
+    <!-- 复制文件任务 CopyTestFiles，在 Build 阶段前 -->
     <Target Name="CopyTestFiles" BeforeTargets="Build">
-        <!-- 目标路径 -->
         <PropertyGroup>
+            <!-- 目标路径 -->
             <TargetFolder>$(OutputPath)HTRI\Case\10086\</TargetFolder>
+            <!-- 源文件路径 -->
+            <!-- 这里的 SourceFolder 路径最后不要加反斜杠 -->
+            <SourceFolder>TestFiles</SourceFolder>
         </PropertyGroup>
+        <ItemGroup>
+            <!-- 确保这里包含的是文件，或者说，Copy 任务会处理其中的文件部分 -->
+            <!-- 建议加上 *.* 明确指代文件，或者 **\* 也行，Copy 任务会选择文件 -->
+            <TestFiles Include="$(SourceFolder)\**\*.*"/>
+        </ItemGroup>
         <!-- 检查并创建目录 -->
         <Message Text="创建目录: $(TargetFolder)" Importance="high"/>
-        <MakeDir Directories="$(TargetFolder)"
-                 Condition="!Exists('$(TargetFolder)')"/>
-        <!-- 源文件路径 -->
-        <ItemGroup>
-            <TestFiles Include="TestFiles\**\*"/>
-        </ItemGroup>
-        <!-- 检查源文件是否存在 -->
-        <Message Text="复制文件从 TestFiles 到 $(TargetFolder)" Importance="high"/>
-
+        <MakeDir Directories="$(TargetFolder)" Condition="!Exists('$(TargetFolder)')"/>
+        <!-- 检查源文件目录是否存在并复制到目标目录 -->
+        <Message Text="复制文件从 $(SourceFolder) 到 $(TargetFolder)" Importance="high"/>
+        <!-- 复制并保留目录结构 -->
         <Copy SourceFiles="@(TestFiles)"
-              DestinationFolder="$(TargetFolder)"
+              DestinationFiles="@(TestFiles->'$(TargetFolder)%(RecursiveDir)%(Filename)%(Extension)')"
               SkipUnchangedFiles="true"
-              Condition="Exists('TestFiles')"/>
+              Condition="Exists('$(SourceFolder)')"/>
+        <!-- 添加调试信息 -->
+        <Message Text="源文件夹 $(SourceFolder) 不存在，跳过复制"
+                 Condition="!Exists('$(SourceFolder)')"
+                 Importance="high"/>
     </Target>
 
 </Project>
